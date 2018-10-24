@@ -1,0 +1,10 @@
+{
+  "name": "@pollex/managerio",
+  "version": "0.1",
+  "description": "An interface to a Manager.IO API",
+  "main": "index.js",
+  "repository": "https://github.com/PollexProjects/ManagerIOAPI",
+  "author": "PollexProjects (Tim van Osch)",
+  "license": "AGPL-3",
+  "private": false
+}
