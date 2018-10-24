@@ -1,10 +1,40 @@
 {
   "name": "@pollex/managerio",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "An interface to a Manager.IO API",
   "main": "index.js",
-  "repository": "https://github.com/PollexProjects/ManagerIOAPI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PollexProjects/ManagerIOAPI.git"
+  },
   "author": "PollexProjects (Tim van Osch)",
-  "license": "AGPL-3",
-  "private": false
+  "license": "AGPL-3.0",
+  "private": false,
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "esdoc": "^1.1.0",
+    "esdoc-named-import-plugin": "^0.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^5.6.1"
+  },
+  "bugs": {
+    "url": "https://github.com/PollexProjects/ManagerIOAPI/issues"
+  },
+  "homepage": "https://github.com/PollexProjects/ManagerIOAPI#readme",
+  "scripts": {
+    "clean": "rimraf lib/",
+    "build": "npm run clean && babel src/ --out-dir lib/ --copy-files",
+    "test": "npm run build && mocha tests/",
+    "buildDocs": "rimraf docs/ && esdoc"
+  },
+  "keywords": [
+    "accounting",
+    "api",
+    "interface",
+    "pollex",
+    "manager.io",
+    "managerio"
+  ]
 }
