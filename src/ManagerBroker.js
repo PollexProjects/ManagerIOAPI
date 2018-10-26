@@ -8,8 +8,8 @@ export default class ManagerBroker {
      * @param {string}  username            Your ManagerIO admin username
      * @param {string}  password            your ManagerIO admin password
      */
-    constructor(username, password) {
-        this.apiBase = 'https://manager.pollexprojects.nl/api/';
+    constructor(server, username, password) {
+        this.apiBase = server;
 
         this.axios = Axios.create({
             baseURL: this.apiBase,
