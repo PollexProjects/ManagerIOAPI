@@ -57,8 +57,7 @@ export default class ManagerEntity {
 
         // Update property, in-case id was not set yet.
         this.id = data[properties['id']];
-        this.updatedAt = moment(data['updatedAt']);
-
+        this.updatedAt = moment(data[properties['updatedAt']]);
         return true;
     }
 
