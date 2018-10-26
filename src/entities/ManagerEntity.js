@@ -8,6 +8,16 @@ import {
 
 export default class ManagerEntity {
 
+    /*
+     * Constants
+     */
+    static get PropertyMap() {
+        return {
+            id: 'Key',
+            updatedAt: 'Timestamp'
+        };
+    }
+
     /**
      * Provides a base-class for entities in the API.
      * Providing an id will create an unresolved entity, which can be resolved
@@ -39,12 +49,14 @@ export default class ManagerEntity {
      * @return {Boolean}        True if the update was applied
      */
     update(data) {
-        if (this.id && this.id !== data[this.constructor.GetIdPropertyName()]) throw new DifferentEntityError();
+        const properties = this.constructor.PropertyMap;
+
+        if (this.id && this.id !== data[properties['id']]) throw new DifferentEntityError();
         // Ensure that the 'update' is newer
-        if (this.updatedAt && this.updatedAt >= moment(data.updated_at)) return false;
+        if (this.updatedAt && this.updatedAt >= moment(properties['updatedAt'])) return false;
 
         // Update property, in-case id was not set yet.
-        this.id = data[this.constructor.GetIdPropertyName()];
+        this.id = data[properties['id']];
         this.updatedAt = moment(data.timestamp);
 
         return true;
