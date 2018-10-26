@@ -53,11 +53,11 @@ export default class ManagerEntity {
 
         if (this.id && this.id !== data[properties['id']]) throw new DifferentEntityError();
         // Ensure that the 'update' is newer
-        if (this.updatedAt && this.updatedAt >= moment(properties['updatedAt'])) return false;
+        if (this.updatedAt && this.updatedAt >= moment(data[properties['updatedAt']])) return false;
 
         // Update property, in-case id was not set yet.
         this.id = data[properties['id']];
-        this.updatedAt = moment(data.timestamp);
+        this.updatedAt = moment(data['updatedAt']);
 
         return true;
     }
