@@ -1,6 +1,6 @@
 import ManagerEntity from './ManagerEntity';
 
-export default class BusinessEntity extends ManagerEntity {
+export default class Business extends ManagerEntity {
 
     static GetResourcePath() {
         return '/index.json';
