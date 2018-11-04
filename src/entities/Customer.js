@@ -1,9 +1,10 @@
 import ManagerEntity from './ManagerEntity';
+import Urls from './EntityUrls';
 
-export default class BusinessEntity extends ManagerEntity {
+export default class Customer extends ManagerEntity {
 
     static GetResourcePath() {
-        return '/ec37c11e-2b67-49c6-8a58-6eccb7dd75ee/index.json';
+        return `/${Urls['Customer']}/index.json`;
     }
 
     update(data) {
