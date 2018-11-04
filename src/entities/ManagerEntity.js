@@ -1,5 +1,6 @@
 const moment = require('moment');
 
+import Urls from './EntityUrls';
 import {
     DifferentEntityError,
     EntityDoesNotSupportCreationError,
@@ -51,12 +52,9 @@ export default class ManagerEntity {
     update(data) {
         const properties = this.constructor.PropertyMap;
 
-        if (this.id && this.id !== data[properties['id']]) throw new DifferentEntityError();
         // Ensure that the 'update' is newer
         if (this.updatedAt && this.updatedAt >= moment(data[properties['updatedAt']])) return false;
 
-        // Update property, in-case id was not set yet.
-        this.id = data[properties['id']];
         this.updatedAt = moment(data[properties['updatedAt']]);
         return true;
     }
@@ -70,7 +68,7 @@ export default class ManagerEntity {
      * @param {ManagerBroker} broker    The broker to use
      */
     static Get(id, broker) {
-        return this.GetAll(broker).filter(el => el.id == id)[0];
+        return broker.getEntity({ entityType: this, id });
     }
 
     /**
@@ -91,7 +89,17 @@ export default class ManagerEntity {
      */
     // eslint-disable-next-line no-unused-vars
     static GetResourcePath(id) {
-        throw new NotImplementedInEntityError();
+        if (id) {
+            return `/${id}.json`;
+        }
+        return Urls[this.GetEntityName()] + '/index.json';
+    }
+
+    /**
+     * Returns the entity' name, which is used to resolve the url
+     */
+    static GetEntityName() {
+        return new NotImplementedInEntityError();
     }
 
     static GetIdPropertyName() {

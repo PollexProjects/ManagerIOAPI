@@ -35,27 +35,23 @@ export default class ManagerBroker {
     async getEntity({ entityType, id }) {
         // TODO: catch errors
         const { data } = await this.getResource(entityType.GetResourcePath(id));
-        // Map data
+        // Map ids
         if (Array.isArray(data)) {
-            return data.map(
-                entity => new entityType({
+            const identifiedEntities = data.map(
+                id => new entityType({
                     broker: this,
-                    data: entity
+                    id
                 })
             );
+            return Promise.all(identifiedEntities.map(entity => entity.get()));
         } else {
-            return new entityType({ broker: this, data });
+            return new entityType({ broker: this, id, data });
         }
     }
 
-    /**
-     * Fetches all or a single ManagerEntity from the API
-     * @param  {ManagerEntity}  resource    The entity to fetch
-     * @param  {UUID}  id                   Optional ID will fetch a specific entity
-     * @return {Promise}                    Promise resolving in the given resource
-     */
     getResource(path) {
         // TODO: catch errors
+        console.log(`Requesting: ${path}...`);
         return this.axios.get(path);
     }
 
