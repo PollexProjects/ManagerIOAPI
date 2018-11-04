@@ -9,12 +9,14 @@ export default class ManagerBroker {
      * @param {string}  password            Your ManagerIO admin password
      * @param {string}  businesses          The business to use. Leave empty to resolve businesses
      */
-    constructor(server, username, password, business = '') {
+    constructor(server, username, password, business = undefined) {
         this.apiBase = server;
 
         // If a business is defined, then this broker is set
+        // This functionality is purely for convenience, otherwise every
+        // Get and GetAll on entities had to provide business IDs
         if (business) {
-            this.set = true;
+            this.business = business;
         }
 
         this.axios = Axios.create({
@@ -32,9 +34,10 @@ export default class ManagerBroker {
      * @param  {UUID}  id                   Optional ID will fetch a specific entity
      * @return {Promise}                    Promise resolving in the given resource
      */
-    async getEntity({ entityType, id }) {
+    async getEntity({ entityType, ...specifiers }) {
         // TODO: catch errors
-        const { data } = await this.getResource(entityType.GetResourcePath(id));
+        // Provides every resource path with the business id if possible.
+        const { data } = await this.getResource(entityType.GetResourcePath({ business: this.business, ...specifiers }));
         // Map ids
         if (Array.isArray(data)) {
             if (data.length == 0) {
@@ -42,20 +45,31 @@ export default class ManagerBroker {
             }
             // If we receive an array of objects, we assume they are resolved
             // entities
-            if (typeof(data) === 'object') {
-                return data.map(el => new entityType({ broker: this, data: el }));
+            if (typeof(data[0]) === 'object') {
+                return data.map(el => new entityType({
+                    broker: this,
+                    business: this.business,
+                    data: el,
+                    ...specifiers
+                }));
             } else {
             // Otherwise we assume they are IDs
                 const identifiedEntities = data.map(
                     id => new entityType({
                         broker: this,
-                        id
+                        business: this.business,
+                        id,
+                        ...specifiers
                     })
                 );
                 return Promise.all(identifiedEntities.map(entity => entity.get()));
             }
         } else {
-            return new entityType({ broker: this, id, data });
+            return new entityType({
+                broker: this,
+                business: this.business,
+                data,
+                ...specifiers });
         }
     }
 
@@ -68,4 +82,9 @@ export default class ManagerBroker {
         return this.axios.post(path, body);
     }
 
+
+    // Getter setters
+    get set() {
+        return !!this.business;
+    }
 }

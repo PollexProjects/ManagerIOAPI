@@ -1,6 +1,5 @@
 const moment = require('moment');
 
-import Urls from './EntityUrls';
 import {
     EntityDoesNotSupportCreationError,
     NotImplementedInEntityError
@@ -88,10 +87,7 @@ export default class ManagerEntity {
      */
     // eslint-disable-next-line no-unused-vars
     static GetResourcePath(id) {
-        if (id) {
-            return `/${id}.json`;
-        }
-        return Urls[this.GetEntityName()] + '/index.json';
+        throw new NotImplementedInEntityError('Entity class is responsible for implementing resource path resolving');
     }
 
     /**

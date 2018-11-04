@@ -1,6 +1,6 @@
-import ManagerEntity from './ManagerEntity';
+import BusinessEntity from './BusinessEntity';
 
-export default class Customer extends ManagerEntity {
+export default class Customer extends BusinessEntity {
 
     static GetEntityName() {
         return 'Customer';
