@@ -4,7 +4,7 @@ import Urls from './EntityUrls';
 export default class Customer extends ManagerEntity {
 
     static GetResourcePath() {
-        return `/${Urls['Customer']}/index.json`;
+        return Urls['Customer'] + '/index.json';
     }
 
     update(data) {
