@@ -6,13 +6,19 @@ export default class ManagerBroker {
      * The ManagerBroker is responsible for final communication between the API
      * and the interface
      * @param {string}  username            Your ManagerIO admin username
-     * @param {string}  password            your ManagerIO admin password
+     * @param {string}  password            Your ManagerIO admin password
+     * @param {string}  businesses          The business to use. Leave empty to resolve businesses
      */
-    constructor(server, username, password) {
+    constructor(server, username, password, business = '') {
         this.apiBase = server;
 
+        // If a business is defined, then this broker is set
+        if (business) {
+            this.set = true;
+        }
+
         this.axios = Axios.create({
-            baseURL: this.apiBase,
+            baseURL: this.apiBase + (business ? `/${business}` : ''),
             auth: {
                 username,
                 password
