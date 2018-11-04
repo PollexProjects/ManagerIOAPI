@@ -8,7 +8,7 @@ export default class Business extends ManagerEntity {
 
     update(data) {
         if (!super.update(data)) return;
-        this.name = data.name;
+        this.name = data.Name;
     }
 
 }
