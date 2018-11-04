@@ -2,7 +2,6 @@ const moment = require('moment');
 
 import Urls from './EntityUrls';
 import {
-    DifferentEntityError,
     EntityDoesNotSupportCreationError,
     NotImplementedInEntityError
 } from '../errors';

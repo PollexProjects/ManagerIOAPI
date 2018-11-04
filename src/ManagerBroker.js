@@ -51,7 +51,6 @@ export default class ManagerBroker {
 
     getResource(path) {
         // TODO: catch errors
-        console.log(`Requesting: ${path}...`);
         return this.axios.get(path);
     }
 
