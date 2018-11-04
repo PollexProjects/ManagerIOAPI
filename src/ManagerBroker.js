@@ -18,7 +18,7 @@ export default class ManagerBroker {
         }
 
         this.axios = Axios.create({
-            baseURL: this.apiBase + (business ? `/${business}` : ''),
+            baseURL: this.apiBase,
             auth: {
                 username,
                 password
@@ -37,13 +37,23 @@ export default class ManagerBroker {
         const { data } = await this.getResource(entityType.GetResourcePath(id));
         // Map ids
         if (Array.isArray(data)) {
-            const identifiedEntities = data.map(
-                id => new entityType({
-                    broker: this,
-                    id
-                })
-            );
-            return Promise.all(identifiedEntities.map(entity => entity.get()));
+            if (data.length == 0) {
+                throw new Error('Malformed data received');
+            }
+            // If we receive an array of objects, we assume they are resolved
+            // entities
+            if (typeof(data) === 'object') {
+                return data.map(el => new entityType({ broker: this, data: el }));
+            } else {
+            // Otherwise we assume they are IDs
+                const identifiedEntities = data.map(
+                    id => new entityType({
+                        broker: this,
+                        id
+                    })
+                );
+                return Promise.all(identifiedEntities.map(entity => entity.get()));
+            }
         } else {
             return new entityType({ broker: this, id, data });
         }
