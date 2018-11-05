@@ -7,17 +7,9 @@ export default class ManagerBroker {
      * and the interface
      * @param {string}  username            Your ManagerIO admin username
      * @param {string}  password            Your ManagerIO admin password
-     * @param {string}  businesses          The business to use. Leave empty to resolve businesses
      */
-    constructor(server, username, password, business = undefined) {
+    constructor(server, username, password) {
         this.apiBase = server;
-
-        // If a business is defined, then this broker is set
-        // This functionality is purely for convenience, otherwise every
-        // Get and GetAll on entities had to provide business IDs
-        if (business) {
-            this.business = business;
-        }
 
         this.axios = Axios.create({
             baseURL: this.apiBase,
@@ -36,8 +28,7 @@ export default class ManagerBroker {
      */
     async getEntity({ entityType, ...specifiers }) {
         // TODO: catch errors
-        // Provides every resource path with the business id if possible.
-        const { data } = await this.getResource(entityType.GetResourcePath({ business: this.business, ...specifiers }));
+        const { data } = await this.getResource(entityType.GetResourcePath(specifiers));
         // Map ids
         if (Array.isArray(data)) {
             if (data.length == 0) {
@@ -48,7 +39,6 @@ export default class ManagerBroker {
             if (typeof(data[0]) === 'object') {
                 return data.map(el => new entityType({
                     broker: this,
-                    business: this.business,
                     data: el,
                     ...specifiers
                 }));
@@ -57,7 +47,6 @@ export default class ManagerBroker {
                 const identifiedEntities = data.map(
                     id => new entityType({
                         broker: this,
-                        business: this.business,
                         id,
                         ...specifiers
                     })
@@ -67,7 +56,6 @@ export default class ManagerBroker {
         } else {
             return new entityType({
                 broker: this,
-                business: this.business,
                 data,
                 ...specifiers });
         }
@@ -80,11 +68,5 @@ export default class ManagerBroker {
 
     postResource(path, body) {
         return this.axios.post(path, body);
-    }
-
-
-    // Getter setters
-    get set() {
-        return !!this.business;
     }
 }
