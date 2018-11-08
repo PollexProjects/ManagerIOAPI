@@ -1,5 +1,6 @@
 const moment = require('moment');
 
+import camelcase from 'camelcase';
 import {
     EntityDoesNotSupportCreationError,
     NotImplementedInEntityError
@@ -52,6 +53,10 @@ export default class ManagerEntity {
 
         // Ensure that the 'update' is newer
         if (this.updatedAt && this.updatedAt >= moment(data[properties['updatedAt']])) return false;
+
+        for (var key in data) {
+            this[camelcase(key)] = data[key];
+        }
 
         this.updatedAt = moment(data[properties['updatedAt']]);
         return true;
