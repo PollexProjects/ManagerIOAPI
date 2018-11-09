@@ -1,6 +1,8 @@
 const moment = require('moment');
 
 import camelcase from 'camelcase';
+
+import SwapKV from '../utilities/SwapKV';
 import {
     EntityDoesNotSupportCreationError,
     NotImplementedInEntityError
@@ -12,9 +14,25 @@ export default class ManagerEntity {
      * Constants
      */
     static get PropertyMap() {
+        // If _extraPropertyMap is not defined then define it,
+        // this also means this is the first call to this function
+        if (!this._ExtraPropertyMap) {
+            this._ExtraPropertyMap = {
+                // Spread entity' property map
+                ...this.ExtraPropertyMap,
+                // Swap key values and spread it as well
+                ...SwapKV(this.ExtraPropertyMap)
+            };
+        }
+
         return {
+            // Hardcoded mapping
             id: 'Key',
-            updatedAt: 'Timestamp'
+            Key: 'id',
+            updatedAt: 'Timestamp',
+            Timestamp: 'updatedAt',
+            // Overwrite with entity defined map
+            ...this._extraPropertyMap
         };
     }
 

@@ -2,7 +2,7 @@ import BusinessEntity from './BusinessEntity';
 
 export default class Attachment extends BusinessEntity {
 
-    static get PropertyMap() {
+    static get ExtraPropertyMap() {
         return {
             updatedAt: 'Date'
         };
