@@ -12,6 +12,33 @@ export default class BusinessEntity extends ManagerEntity {
         return this.constructor.Get(this.id, this.business, this.broker);
     }
 
+    /**
+     * Spawns an entity that lives in the same context as the entity it is
+     * spawned from, meaning it has the same broker and business.
+     * @param  {class} ctor      The entity to spawn
+     * @param  {object|string} otherOrId Either the entity id or an object containing more than one property
+     * @return {Object}           Instance of @ctor
+     */
+    spawn(ctor, otherOrId) {
+        // base properties
+        let properties = {
+            broker: this.broker,
+            business: this.business
+        };
+
+        // If parameter is string then assign as id, otherwise spread
+        if (typeof(otherOrId) === 'string') {
+            properties.id = otherOrId;
+        } else {
+            properties = {
+                ...properties,
+                ...otherOrId
+            };
+        }
+        // Instantiate new ctor
+        return new ctor(properties);
+    }
+
     static GetResourcePath({ id, business }) {
         if (id) {
             return `/${business}/${id}.json`;
