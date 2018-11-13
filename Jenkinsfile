@@ -3,13 +3,18 @@ pipeline {
   stages {
     stage('Update npm') {
       steps {
-        nodejs 'nodejs_latest'
-        sh 'npm install'
+        nodejs('nodejs_latest') {
+          sh 'npm install'
+        }
+
       }
     }
     stage('Run Mocha tests') {
       steps {
-        sh 'npm run test'
+        nodejs('nodejs_latest') {
+          sh 'npm run test'
+        }
+
       }
     }
   }
