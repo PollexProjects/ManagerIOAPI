@@ -9,11 +9,7 @@ export default class BankReconciliationBalance extends BusinessEntity {
 
     update(data) {
         if (!super.update(data)) return;
-        this.account = new BankAccount({
-            broker: this.broker,
-            business: this.business,
-            id: this.account
-        });
+        this.account = this.spawn(BankAccount, this.account);
     }
 
 }
