@@ -8,6 +8,7 @@ import BaseCurrency from './entities/BaseCurrency';
 import BillableTimeEntry from './entities/BillableTimeEntry';
 import Business from './entities/Business';
 import BusinessDetails from './entities/BusinessDetails';
+import BusinessEntity from './entities/BusinessEntity';
 import CapitalSubaccount from './entities/CapitalSubaccount';
 import CashSummary from './entities/CashSummary';
 import Customer from './entities/Customer';
@@ -48,6 +49,7 @@ export {
     BillableTimeEntry,
     Business,
     BusinessDetails,
+    BusinessEntity,
     CapitalSubaccount,
     CashSummary,
     Customer,
